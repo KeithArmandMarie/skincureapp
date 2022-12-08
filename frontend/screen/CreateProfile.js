@@ -1,117 +1,95 @@
-import React from 'react';
+import React from "react";
 import { useState } from "react";
-import { StyleSheet, Text, View, Button, ImageBackground, Pressable} from 'react-native';
-import * as Font from 'expo-font'
+import { StyleSheet, TextInput, View, Text, Button, Alert } from "react-native";
+import RadioForm from "react-native-simple-radio-button";
 
-function CreateProfile(props) {
-  const Separator = () => (
-     <View style = {styles.separator}/>
+function CreateProfile({ navigation }) {
+  const [name, setName] = useState(null);
+  const [age, setAge] = useState(null);
+  const [sex, setSex] = useState(null);
+
+  var radio_props = [
+    { label: "Male", value: "Male" },
+    { label: "Female", value: "Female" },
+  ];
+
+  const handleCreateProfile = async () => {
+    const settings = {
+      method: 'POST',
+      headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: name,
+        age: age,
+        sex: sex.value,
+      }),
+    };
+    try {
+      let response = await fetch("http://192.168.254.187:8000/skincure/profile/", settings)
+      let result = await response.json()
+      navigation.navigate("Profile")
+    } catch(err) {
+      Alert.alert(err)
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.radioButtonLabel}>Create a Profile</Text>
+      <View style={{ width: "100%" }}>
+        <TextInput
+          style={styles.baseTextInput}
+          value={name}
+          onChangeText={setName}
+          placeholder="Name"
+        />
+        <TextInput
+          style={styles.baseTextInput}
+          value={age}
+          onChangeText={setAge}
+          placeholder="Age"
+        />
+        <Text style={styles.radioButtonLabel}>Select Sex:</Text>
+        <View style={{ padding: 10 }}>
+          <RadioForm
+            buttonColor={"#834D1E"}
+            selectedButtonColor={"#834D1E"}
+            radio_props={radio_props}
+            initial={""}
+            onPress={(value) => setSex({ value: value })}
+          />
+        </View>
+        <View style={{padding: 20}}>
+          <Button title="Submit" onPress={handleCreateProfile} />
+        </View>
+      </View>
+    </View>
   );
- return (
-    <ImageBackground 
-    style = {styles.background}
-   source={require('../background3.png')}>  
-   <View>
-    <Text style={styles.baseText}>
-    Name
-    </Text> 
-   <View>
-  <Text style={styles.baseText1}>
-    Age
-  </Text>
-<View style ={styles.button1}>
-<Button
-   color ='#834D1E'
-title='Continue'/>
-</View> 
-</View> 
-</View>
-    </ImageBackground>
-
-  )
 }
 
 export default CreateProfile;
 const styles = StyleSheet.create({
-
-  container:{
-    flex:1,
-    justifyContent:"center",
-    alignItems:"center",
-    top:100,
-    paddingVertical: 5,
-    paddingHorizontal: 30,
-    textAlign:"center",
-    
-
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "flex-start",
   },
-    background:{
-      flex:1,
-      position:'absolute',
-      width:360,
-      height:753,
-      
-    },
-  
-    button1:{
-      alignItems: 'center',
-      paddingVertical: 15,
-      paddingHorizontal: 50,
-      position: 'absolute',
-      top: 400,
-      left: 80,
-      fontFamily: "Red-Hat-Text-Medium",
-      borderRadius: 5,
-    
-    
-    },
-    text: {
-      fontSize: 10,
-      lineHeight: 21,
-      fontWeight: 'bold',
-      letterSpacing: 0.25,
-      color: 'white',
-    },
-    titleText:{
-      alignItems: 'center',
-      fontSize: 25,
-      textAlign:"center",
-      fontFamily: "Red-Hat-Text-Medium",
-      color:'#4C4C4C',
-   top: 20,
-  
-    },
-    baseText:{
-      fontSize: 15,
-      fontWeight: "medium",
-      textAlign:"center",
-      fontFamily: "Red-Hat-Text-Regular",
-      color:'#4C4C4C',
-      top:180,
-      right: 100,
-      paddingVertical: 12,
-      paddingHorizontal: 32,
-    },
-    baseText1:{
-      fontSize: 15,
-      fontWeight: "medium",
-      textAlign:"center",
-      fontFamily: "Red-Hat-Text-Regular",
-      color:'#4C4C4C',
-      top:137,
-      left:50,
-      paddingVertical: 12,
-      paddingHorizontal: 32,
-    },
-    baseText2:{
-      fontSize: 15,
-      fontWeight: "bold",
-      textAlign:"center",
-      fontFamily: "Red-Hat-Text-Regular",
-      color:'#4D4D4D',
-      top:20,
-      paddingVertical: 12,
-      paddingHorizontal: 32,
-    },
-  })
-  
+
+  textInputRow: {
+    flexDirection: "row",
+  },
+
+  radioButtonLabel: {
+    fontSize: 20,
+    margin: 10,
+  },
+
+  baseTextInput: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
+});

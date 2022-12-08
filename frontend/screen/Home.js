@@ -7,10 +7,10 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView
+  SafeAreaView,
 } from "react-native";
 
-function Home({ navigation}) {
+function Home({ navigation }) {
   const [data, setData] = useState([]);
 
   // useEffect(() => {
@@ -42,8 +42,11 @@ function Home({ navigation}) {
     <View>
       <ScrollView>
         <View style={styles.container2}>
-          <TouchableOpacity onPress={()=> navigation.navigate("CameraScreen")}>
-            <Image style={styles.option} source={require("../assets/icons/add_case.png")}/>
+          <TouchableOpacity onPress={() => navigation.navigate("CameraScreen")}>
+            <Image
+              style={styles.option}
+              source={require("../assets/icons/add_case.png")}
+            />
           </TouchableOpacity>
         </View>
         <View style={styles.container}>
@@ -54,14 +57,19 @@ function Home({ navigation}) {
             </Text>
           </View>
           <View style={styles.container1}>
-            <Image style={styles.image} source={require("../assets/icons/cases.png")} />
+            <Image
+              style={styles.image}
+              source={require("../assets/icons/cases.png")}
+            />
             <Text style={styles.text1}>CASES</Text>
           </View>
           <View style={styles.container1}>
-            <Image
-              style={styles.image}
-              source={require("../assets/icons/profile.png")}
-            ></Image>
+            <TouchableOpacity onPress={()=>navigation.navigate("Profile")}>
+              <Image
+                style={styles.image}
+                source={require("../assets/icons/profile.png")}
+              ></Image>
+            </TouchableOpacity>
             <Text style={styles.text1}>PROFILES</Text>
           </View>
         </View>
@@ -89,8 +97,8 @@ const styles = StyleSheet.create({
   },
   container1: {
     backgroundColor: "#B1907F",
-    margin:10,
-    padding:10,
+    margin: 10,
+    padding: 10,
     borderRadius: 20,
   },
   text: {

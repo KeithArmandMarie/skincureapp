@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import {StyleSheet, Text, View, TouchableOpacity, Alert, ImageBackground, Image} from 'react-native'
 import {Camera} from 'expo-camera'
 let camera;
-export default function CameraScreen() {
+export default function CameraScreen({navigation}) {
   const [startCamera, setStartCamera] = React.useState(false)
   const [previewVisible, setPreviewVisible] = React.useState(false)
   const [capturedImage, setCapturedImage] = React.useState(null)
@@ -23,7 +23,9 @@ export default function CameraScreen() {
     setPreviewVisible(true)
     setCapturedImage(photo)
   }
-  const __savePhoto = () => {}
+  const __savePhoto = () => {
+    navigation.navigate("Result");
+  }
   const __retakePicture = () => {
     setCapturedImage(null)
     setPreviewVisible(false)
