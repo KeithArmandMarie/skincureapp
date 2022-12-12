@@ -5,7 +5,9 @@ from .serializers import SkinDiseaseSerializer, TreatmentSerializers, SymptompSe
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.contrib.sessions.models import Session
 import json
+import uuid
 
 class TreatmentViewSet(ListCreateAPIView):
     queryset = Treatment.objects.all()
@@ -49,21 +51,30 @@ class ProfileView(APIView):
         if "profiles" not in request.session:
             request.session["profiles"] = []
         context = request.session["profiles"]
-        print(request.method)
+        print(request.session["profiles"])
+        del request.session["profiles"]
         return Response(context)
     
     def post(self, request):
         if "profiles" not in request.session:
             request.session["profiles"] = []
-        profile = {
+        userprofile = {
+            "id": uuid.uuid4().hex[:20],
             "name": request.data["name"],
             "age": request.data["age"],
             "sex": request.data["sex"],
             "result": "acne",
             "accuracy": "93%",
         }
-        request.session["profiles"] += [profile]
-        print(request.session["profiles"])
+
+        profileList = request.session["profiles"]
+
+        if profileList:
+            for prof in profileList:
+                if prof.id == userprofile.id:
+                    return Response({})
+
+        request.session["profiles"] += [userprofile]
         return Response(request.session["profiles"])
 
     def delete(self, request):
@@ -71,3 +82,6 @@ class ProfileView(APIView):
         console.log("deleted")
         return Response(request.session["profiles"])
 
+
+def delProfile(request, id):
+    pass

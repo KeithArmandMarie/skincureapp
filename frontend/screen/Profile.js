@@ -75,8 +75,35 @@ const ContainerView = ({ navigation }) => {
     let response = await fetch("http://192.168.254.187:8000/skincure/profile/");
     let results = await response.json();
     await setProfileList(results);
-    console.log(results);
   };
+
+  const mapProfileList = () => {
+    
+    return (
+      profileList.map((profile, index) => {
+
+        if(profile == null){
+          console.log("asd")
+          return (
+            <View style={styles.icon}>
+              <Text>No Data</Text>
+            </View>
+          )
+        }
+
+        return (
+          <View style={styles.icon} key={index}>
+            {displayDelete()}
+            <Image
+              source={require("../assets/icons/male.png")}
+              style={styles.imgicon}
+            />
+            <Text>{profile.id}</Text>
+          </View>
+        );
+      })
+    )
+  }
 
   useEffect(() => {
     displayProfileList();
@@ -99,18 +126,8 @@ const ContainerView = ({ navigation }) => {
       </View>
       <ScrollView style={styles.scrollViewStyle}>
         <View style={styles.row}>
-          {profileList.map((profile, index) => {
-            return (
-              <View style={styles.icon} key={index}>
-                {displayDelete()}
-                <Image
-                  source={require("../assets/icons/male.png")}
-                  style={styles.imgicon}
-                />
-                <Text>{profile.name}</Text>
-              </View>
-            );
-          })}
+          {mapProfileList()}
+          
           {/* <View style={styles.icon}>
             {displayDelete()}
             <Image source={require("../assets/icons/male.png")} style={styles.imgicon} />
